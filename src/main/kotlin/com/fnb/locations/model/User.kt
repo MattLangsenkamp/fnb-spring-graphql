@@ -1,9 +1,22 @@
 package com.fnb.locations.model
 
+import java.util.*
+import javax.persistence.Column
+import javax.persistence.Entity
+import javax.persistence.Id
+
+@Entity
 data class User(
-        val id: String,
+        @Id
+        val id: UUID,
+
+        @Column(name = "password")
         val password: ByteArray,
+
+        @Column(name = "count")
         val count: Int,
+
+        @Column(name = "permissionLevel")
         val permissionLevel: UserPermissionLevel
 ) {
     override fun equals(other: Any?): Boolean {

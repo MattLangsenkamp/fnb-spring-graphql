@@ -5,5 +5,9 @@ import org.springframework.transaction.annotation.Transactional
 
 @Service
 @Transactional
-class PermissionService {
+class ImageService {
+
+    fun uploadImage(img: String): String {
+        return "dumby"
+    }
 }

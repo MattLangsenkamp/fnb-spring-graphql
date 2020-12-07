@@ -2,19 +2,18 @@ package com.fnb.locations.graphql.userdata
 
 import com.expediagroup.graphql.spring.operations.Query
 import com.fnb.locations.model.UserData
+import com.fnb.locations.service.UserDataService
+import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 
 @Component
-class UserDatasQuery: Query {
-    fun userDatas(): List<UserData> {
-    return listOf(UserData(
-            "id",
-            "username",
-            "contact",
-            "description",
-            "picture",
-            listOf("locations")
-            )
-        )
+class UserDatasQuery
+@Autowired constructor(private val userDataService: UserDataService) : Query {
+
+    private val logger = LoggerFactory.getLogger(javaClass)
+
+    suspend fun userDatas(): List<UserData> {
+        return userDataService.getAllUserData()
     }
 }
