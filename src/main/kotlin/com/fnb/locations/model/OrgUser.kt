@@ -1,29 +1,22 @@
 package com.fnb.locations.model
 
+import org.springframework.data.annotation.Id
+import org.springframework.data.relational.core.mapping.Table
 import java.util.*
-import javax.persistence.Column
-import javax.persistence.Entity
-import javax.persistence.Id
 
-@Entity
-data class User(
+@Table
+data class OrgUser(
         @Id
-        val id: UUID,
-
-        @Column(name = "password")
+        val id: Int? = null,
         val password: ByteArray,
-
-        @Column(name = "count")
         val count: Int,
-
-        @Column(name = "permissionLevel")
         val permissionLevel: UserPermissionLevel
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
-        other as User
+        other as OrgUser
 
         if (id != other.id) return false
         if (!password.contentEquals(other.password)) return false

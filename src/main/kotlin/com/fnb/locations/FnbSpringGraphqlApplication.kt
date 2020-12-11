@@ -7,5 +7,5 @@ import org.springframework.boot.runApplication
 class FnbSpringGraphqlApplication
 
 fun main(args: Array<String>) {
-	runApplication<FnbSpringGraphqlApplication>(*args)
+    runApplication<FnbSpringGraphqlApplication>(*args)
 }

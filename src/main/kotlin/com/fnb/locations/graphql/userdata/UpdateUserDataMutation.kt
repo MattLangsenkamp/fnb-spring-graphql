@@ -2,7 +2,7 @@ package com.fnb.locations.graphql.userdata
 
 import com.expediagroup.graphql.spring.operations.Mutation
 import com.fnb.locations.model.Location
-import com.fnb.locations.model.UserData
+import com.fnb.locations.model.OrgUserData
 import com.fnb.locations.service.UserDataService
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
@@ -14,12 +14,12 @@ class UpdateUserDataMutation
 @Autowired constructor(private val userDataService: UserDataService) : Mutation {
 
     private val logger = LoggerFactory.getLogger(javaClass)
-    suspend fun updateUserData(id: UUID,
+    suspend fun updateUserData(id: Int,
                                username: String,
                                contact: String,
                                description: String,
                                picture: String,
-                               locations: List<Location>): UserData {
+                               locations: List<Location>): OrgUserData {
         return userDataService.updateUserData(
                 id,
                 username,

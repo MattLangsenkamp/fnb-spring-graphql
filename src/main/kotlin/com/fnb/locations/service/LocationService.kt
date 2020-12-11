@@ -1,8 +1,8 @@
 package com.fnb.locations.service
 
-import com.fnb.locations.dao.LocationRepositoryJPA
+import com.fnb.locations.dao.LocationRepository
 import com.fnb.locations.model.Location
-import com.fnb.locations.model.Tag
+import com.fnb.locations.model.LocationTag
 import kotlinx.coroutines.flow.toList
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
@@ -12,10 +12,8 @@ import java.time.Instant
 import java.util.*
 
 @Service
-@Transactional
-class LocationService @Autowired constructor(
-        private val imageService: ImageService,
-        private val locationRepository: LocationRepositoryJPA) {
+class LocationService
+@Autowired constructor(private val repo: LocationRepository, private val imageService: ImageService) {
 
     private val logger = LoggerFactory.getLogger(javaClass)
 
@@ -32,18 +30,18 @@ class LocationService @Autowired constructor(
      * @param typeTags the type of location
      * @return newly created location on success, null on failure
      */
+    @Transactional
     suspend fun addLocation(name: String,
                             friendlyName: String,
                             description: String,
                             latitude: Double,
                             longitude: Double,
                             picture: String,
-                            typeTags: List<Tag>
+                            typeTags: List<LocationTag>
     ): Location {
         logger.debug("Creating new location named $name")
-        val id = UUID.randomUUID()
-        val pictureURI = imageService.uploadImage(picture)
-        val location = Location(id = id,
+        val pictureURI = "goober"//imageService.uploadImage(picture)
+        val location = Location(
                 name = name,
                 friendlyName = friendlyName,
                 description = description,
@@ -53,9 +51,8 @@ class LocationService @Autowired constructor(
                 needsCleaning = false,
                 locationOwner = "who ever is logged in",
                 typeTags = typeTags,
-                creationDateTime = Instant.now())
-
-        return locationRepository.save(location)
+        )
+        return repo.save(location)
     }
 
     /**
@@ -65,8 +62,8 @@ class LocationService @Autowired constructor(
      * @return Location Data Class representing intended location
      * or null if location with specified id does not exist
      */
-    suspend fun getLocation(id: UUID): Location {
-        return locationRepository.findById(id) ?: throw Exception("no such Location")
+    suspend fun getLocation(id: Int): Location {
+        return repo.findById(id) ?: throw Exception("no such Location")
     }
 
     /**
@@ -76,7 +73,7 @@ class LocationService @Autowired constructor(
      */
     suspend fun getAllLocations(): List<Location> {
         logger.debug("Retrieving all locations")
-        return locationRepository.findAll().toList()
+        return repo.findAll().toList()
     }
 
     /**
@@ -85,15 +82,15 @@ class LocationService @Autowired constructor(
      * @param location the location to update, 0 or more fields my be changed with the exception of the id
      * @return the new location object on success, null on failure
      */
-    suspend fun updateLocation(id: UUID,
+    suspend fun updateLocation(id: Int,
                                name: String?,
                                friendlyName: String?,
                                description: String?,
                                latitude: Double?,
                                longitude: Double?,
                                picture: String?,
-                               typeTags: List<Tag>?): Location {
-        val location = locationRepository.findById(id) ?: throw Exception("no such location")
+                               typeTags: List<LocationTag>?): Location {
+        val location = repo.findByLocationOwner(id) ?: throw Exception()
         // TODO permission service stuff
         val pictureURI = if (picture != null) imageService.uploadImage(picture) else null
         val updatedLocation = location.copy(
@@ -105,7 +102,7 @@ class LocationService @Autowired constructor(
                 pictureURI = pictureURI ?: location.pictureURI,
                 typeTags = typeTags ?: location.typeTags
         )
-        return locationRepository.save(updatedLocation)
+        return repo.save(updatedLocation)
     }
 
     /**
@@ -114,11 +111,11 @@ class LocationService @Autowired constructor(
      * @param id guid identifier for entry to delete
      * @return the deleted location if successful, null otherwise
      */
-    suspend fun deleteLocation(id: UUID): Location {
+    suspend fun deleteLocation(id: Int): Location {
 
-        val currentLocation = locationRepository.findById(id) ?: throw Exception()
+        val currentLocation = repo.findById(id) ?: throw Exception()
         // TODO permission service stuff
-        locationRepository.deleteById(id)
+        repo.deleteById(id)
         return currentLocation
     }
 }

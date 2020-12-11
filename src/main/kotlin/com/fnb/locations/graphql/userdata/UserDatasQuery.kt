@@ -1,7 +1,7 @@
 package com.fnb.locations.graphql.userdata
 
 import com.expediagroup.graphql.spring.operations.Query
-import com.fnb.locations.model.UserData
+import com.fnb.locations.model.OrgUserData
 import com.fnb.locations.service.UserDataService
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
@@ -13,7 +13,7 @@ class UserDatasQuery
 
     private val logger = LoggerFactory.getLogger(javaClass)
 
-    suspend fun userDatas(): List<UserData> {
+    suspend fun userDatas(): List<OrgUserData> {
         return userDataService.getAllUserData()
     }
 }

@@ -6,7 +6,6 @@ import com.fnb.locations.service.LocationService
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
-import java.util.*
 
 @Component
 class DeleteLocationMutation
@@ -14,7 +13,7 @@ class DeleteLocationMutation
 
     private val logger = LoggerFactory.getLogger(javaClass)
 
-    suspend fun deleteLocation(id: UUID): Location {
+    suspend fun deleteLocation(id: Int): Location {
         logger.debug("Request to delete location with ID $id")
 
         return locationService.deleteLocation(id)

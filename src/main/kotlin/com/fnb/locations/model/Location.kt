@@ -1,43 +1,28 @@
 package com.fnb.locations.model
 
+import org.springframework.data.annotation.Id
+import org.springframework.data.annotation.Transient
+import org.springframework.data.relational.core.mapping.Column
 import java.time.Instant
-import java.util.*
-import javax.persistence.*
+import org.springframework.data.relational.core.mapping.Table
 
-@Entity
-@Table(name = "location")
+
+@Table
 data class Location(
         @Id
-        val id: UUID,
-
-        @Column(name = "name")
+        @Column("_id")
+        val id: Int? = null,
+        @Column("_name")
         val name: String,
-
-        @Column(name = "friendlyName")
         val friendlyName: String,
-
-        @Column(name = "description")
         val description: String,
-
-        @Column(name = "latitude")
         val latitude: Double,
-
-        @Column(name = "longitude")
         val longitude: Double,
-
-        @Column(name = "pictureURI")
         val pictureURI: String,
-
-        @Column
         val locationOwner: String,
-        @Column
         val needsCleaning: Boolean,
-
-        @ManyToMany(fetch = FetchType.EAGER)
-        @JoinTable(name = "location_tags_bridge")
-        val typeTags: List<Tag> = emptyList(),
-
-        @Column
-        val creationDateTime: Instant
+        @Transient
+        var typeTags: List<LocationTag>?,
+        val creationDateTime: String = Instant.now().toString(),
 )
 
