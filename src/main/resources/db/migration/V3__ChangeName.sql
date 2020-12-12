@@ -1,2 +1,0 @@
-alter table location
-rename column creationDateTime to creation_date_time

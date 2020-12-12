@@ -19,7 +19,7 @@ data class Location(
         val latitude: Double,
         val longitude: Double,
         val pictureURI: String,
-        val locationOwner: String,
+        val locationOwner: Int,
         val needsCleaning: Boolean,
         @Transient
         var typeTags: List<LocationTag>?,

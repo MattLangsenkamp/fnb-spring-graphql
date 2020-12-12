@@ -11,7 +11,7 @@ data class OrgUserData(
         @Id @Column("_id")
         val id: Int? = null,
         @Column("org_user_id")
-        val orgUserId: String,
+        val orgUserId: Int,
         val username: String,
         val contact: String,
         val description: String,

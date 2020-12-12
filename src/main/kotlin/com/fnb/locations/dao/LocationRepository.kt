@@ -8,5 +8,5 @@ import org.springframework.transaction.annotation.Transactional
 
 @Repository
 interface LocationRepository : CoroutineCrudRepository<Location, Int> {
-    suspend fun findByLocationOwner(id: Int): Location?
+    suspend fun findByLocationOwner(id: Int): List<Location>
 }

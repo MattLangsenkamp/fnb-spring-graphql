@@ -1,12 +1,12 @@
 create TABLE if NOT exists org_user(
-    _id CHAR(36) PRIMARY KEY,
+    _id int PRIMARY KEY generated always as identity,
     password BYTEA NOT NULL,
     count INT NOT NULL,
     permission_level user_permission_level NOT NULL
 );
 
 create TABLE if NOT exists location(
-    _id CHAR(36) PRIMARY KEY,
+    _id int PRIMARY KEY generated always as identity,
     _name VARCHAR(255) NOT NULL,
     friendly_name VARCHAR(510) NOT NULL,
     description VARCHAR(765) NOT NULL,
@@ -16,21 +16,21 @@ create TABLE if NOT exists location(
     longitude NUMERIC NOT NULL
         CONSTRAINT long_top_bound CHECK (latitude<=180),
         CONSTRAINT long_bottom_bound CHECK (latitude>=-180),
-    location_owner CHAR(36) NOT NULL REFERENCES org_user(_id) ON delete CASCADE,
+    location_owner int NOT NULL REFERENCES org_user(_id) ON delete CASCADE,
     picture_uri varchar(255) NOT NULL,
     needs_cleaning BOOLEAN NOT NULL,
-    creationDateTime VARCHAR(255) NOT NULL
+    creation_date_time VARCHAR(255) NOT NULL
 );
 
 create TABLE if NOT exists location_tag(
-    _id CHAR(36) PRIMARY KEY,
+    _id int PRIMARY KEY generated always as identity,
     tag_name VARCHAR(255) NOT NULL,
     description VARCHAR(765) NOT NULL
 );
 
 create TABLE if NOT exists location_tag_bridge(
-    location_id CHAR(36) NOT NULL REFERENCES location(_id) ON delete CASCADE,
-    tag_id CHAR(36) NOT NULL REFERENCES location_tag(_id) ON delete CASCADE,
+    location_id int NOT NULL REFERENCES location(_id) ON delete CASCADE,
+    tag_id int NOT NULL REFERENCES location_tag(_id) ON delete CASCADE,
     PRIMARY KEY (location_id, tag_id)
 );
 
@@ -42,8 +42,8 @@ END $$;
 
 
 create TABLE if not exists org_user_data(
-    _id CHAR(36) PRIMARY KEY,
-    org_user_id CHAR(36) NOT NULL REFERENCES org_user(_id) ON delete CASCADE,
+    _id int PRIMARY KEY generated always as identity,
+    org_user_id int NOT NULL REFERENCES org_user(_id) ON delete CASCADE,
     username VARCHAR(255) NOT NULL,
     contact VARCHAR(510) NOT NULL,
     description VARCHAR(765) NOT NULL,

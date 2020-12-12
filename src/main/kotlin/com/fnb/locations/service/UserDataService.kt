@@ -20,7 +20,7 @@ class UserDataService
             locations: List<Location>): OrgUserData {
 
         val userData = OrgUserData(
-                orgUserId = "",
+                orgUserId = 1,
                 username = username,
                 contact = contact,
                 description = description,
@@ -31,7 +31,7 @@ class UserDataService
     }
 
     suspend fun deleteUserData(id: Int): OrgUserData {
-        return OrgUserData(id, "", "", "", "", "", emptyList())
+        return OrgUserData(id, 1, "", "", "", "", emptyList())
     }
 
     suspend fun getAllUserData(): List<OrgUserData> {
@@ -50,7 +50,7 @@ class UserDataService
                                locations: List<Location>): OrgUserData {
         return OrgUserData(
                 username = username,
-                orgUserId = "",
+                orgUserId = 1,
                 contact = contact,
                 description = description,
                 pictureURI = picture,

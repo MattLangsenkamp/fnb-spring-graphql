@@ -49,7 +49,7 @@ class LocationService
                 longitude = longitude,
                 pictureURI = pictureURI,
                 needsCleaning = false,
-                locationOwner = "who ever is logged in",
+                locationOwner = 1,
                 typeTags = typeTags,
         )
         return repo.save(location)
@@ -90,7 +90,7 @@ class LocationService
                                longitude: Double?,
                                picture: String?,
                                typeTags: List<LocationTag>?): Location {
-        val location = repo.findByLocationOwner(id) ?: throw Exception()
+        val location = repo.findById(id) ?: throw Exception()
         // TODO permission service stuff
         val pictureURI = if (picture != null) imageService.uploadImage(picture) else null
         val updatedLocation = location.copy(

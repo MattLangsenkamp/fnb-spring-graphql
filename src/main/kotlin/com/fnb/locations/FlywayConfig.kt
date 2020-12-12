@@ -19,8 +19,6 @@ class FlywayConfig(
         val config = Flyway
                 .configure()
                 .dataSource(url, user, password)
-                .baselineOnMigrate(true)
-                .cleanDisabled(false)
         return Flyway(config)
     }
 }
