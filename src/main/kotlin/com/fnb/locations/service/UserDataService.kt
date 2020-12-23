@@ -1,60 +1,28 @@
 package com.fnb.locations.service
 
-import com.fnb.locations.dao.UserDataRepository
 import com.fnb.locations.model.Location
+import com.fnb.locations.model.LoggedInUser
 import com.fnb.locations.model.OrgUserData
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.stereotype.Service
-import org.springframework.transaction.annotation.Transactional
-import java.util.*
 
-@Service
-@Transactional
-class UserDataService
-@Autowired constructor(private val repo: UserDataRepository) {
+interface UserDataService {
     suspend fun addUserData(
+            loggedInUser: LoggedInUser,
             username: String,
             contact: String,
             description: String,
             picture: String,
-            locations: List<Location>): OrgUserData {
+            locations: List<Location>): OrgUserData
 
-        val userData = OrgUserData(
-                orgUserId = 1,
-                username = username,
-                contact = contact,
-                description = description,
-                pictureURI = picture,
-                locations = locations)
+    suspend fun deleteUserData(loggedInUser: LoggedInUser, id: Int): OrgUserData
 
-        return repo.save(userData)
-    }
+    suspend fun getAllUserData(): List<OrgUserData>
 
-    suspend fun deleteUserData(id: Int): OrgUserData {
-        return OrgUserData(id, 1, "", "", "", "", emptyList())
-    }
+    suspend fun getUserData(id: Int): OrgUserData
 
-    suspend fun getAllUserData(): List<OrgUserData> {
-        return emptyList()
-    }
-
-    suspend fun getUserData(id: Int): OrgUserData {
-        return repo.findById(id) ?: throw Exception("Could not find user data")
-    }
-
-    suspend fun updateUserData(id: Int,
-                               username: String,
-                               contact: String,
-                               description: String,
-                               picture: String,
-                               locations: List<Location>): OrgUserData {
-        return OrgUserData(
-                username = username,
-                orgUserId = 1,
-                contact = contact,
-                description = description,
-                pictureURI = picture,
-                locations = locations)
-
-    }
+    suspend fun updateUserData(loggedInUser: LoggedInUser,
+                               id: Int,
+                               username: String?,
+                               contact: String?,
+                               description: String?,
+                               picture: String?): OrgUserData
 }

@@ -1,9 +1,10 @@
 package com.fnb.locations.service
 
-import org.springframework.stereotype.Service
-import org.springframework.transaction.annotation.Transactional
+import com.fnb.locations.model.*
 
-@Service
-@Transactional
-class PermissionService {
+interface PermissionService {
+    suspend fun authorizeUserAction(loggedInUser: LoggedInUser, user: OrgUser)
+    suspend fun authorizeUserDataAction(loggedInUser: LoggedInUser, userData: OrgUserData)
+    suspend fun authorizeLocationAction(loggedInUser: LoggedInUser, location: Location)
+    suspend fun authorizeLocationTagAction(loggedInUser: LoggedInUser, locationTag: LocationTag)
 }

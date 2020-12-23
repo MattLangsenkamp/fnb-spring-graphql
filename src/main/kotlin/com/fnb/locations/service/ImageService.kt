@@ -1,12 +1,7 @@
 package com.fnb.locations.service
 
-import org.springframework.stereotype.Service
-import org.springframework.transaction.annotation.Transactional
+import com.fnb.locations.model.LoggedInUser
 
-@Service
-class ImageService {
-
-    fun uploadImage(img: String): String {
-        return "dumby"
-    }
+interface ImageService {
+    fun uploadImage(loggedInUser: LoggedInUser, img: String): String
 }

@@ -2,7 +2,7 @@ package com.fnb.locations.graphql.userdata
 
 import com.expediagroup.graphql.spring.operations.Query
 import com.fnb.locations.model.OrgUserData
-import com.fnb.locations.service.UserDataService
+import com.fnb.locations.service.impl.UserDataService
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
@@ -13,6 +13,7 @@ class UserDataQuery
     private val logger = LoggerFactory.getLogger(javaClass)
 
     suspend fun userData(id: Int): OrgUserData {
+        logger.debug("request to get user data with id: $id received")
 
         return userDataService.getUserData(id)
     }

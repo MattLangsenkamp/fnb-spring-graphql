@@ -9,7 +9,7 @@ import java.util.*
 data class LocationTag(
         @Id
         val id: Int? = null,
-        @Column("tag_name")
-        val name: String,
-        val description: String
+        val tagName: String,
+        val description: String,
+        val ownerId: Int
 )

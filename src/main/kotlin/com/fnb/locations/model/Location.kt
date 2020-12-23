@@ -1,19 +1,20 @@
 package com.fnb.locations.model
 
+import com.expediagroup.graphql.annotations.GraphQLIgnore
+import com.fnb.locations.customExceptions.IllegalArgumentException
+import com.fnb.locations.service.impl.LocationTagService
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.annotation.Id
 import org.springframework.data.annotation.Transient
-import org.springframework.data.relational.core.mapping.Column
 import java.time.Instant
 import org.springframework.data.relational.core.mapping.Table
 
 
 @Table
-data class Location(
+data class Location @Autowired(required = false) constructor(
         @Id
-        @Column("_id")
         val id: Int? = null,
-        @Column("_name")
-        val name: String,
+        val locationName: String,
         val friendlyName: String,
         val description: String,
         val latitude: Double,
@@ -22,7 +23,18 @@ data class Location(
         val locationOwner: Int,
         val needsCleaning: Boolean,
         @Transient
-        var typeTags: List<LocationTag>?,
+        @GraphQLIgnore
+        var locationTags: List<LocationTag>?,
         val creationDateTime: String = Instant.now().toString(),
-)
+) {
+
+    @Autowired
+    private lateinit var locationTagService: LocationTagService
+
+    suspend fun locationTags(): List<LocationTag> {
+        if (locationTags != null) return locationTags as List<LocationTag>
+        return locationTagService.getTagsByLocation(locationId = id
+                ?: throw IllegalArgumentException("location must exist to get tags"))
+    }
+}
 

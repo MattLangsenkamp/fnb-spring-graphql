@@ -2,7 +2,7 @@ package com.fnb.locations.graphql.location
 
 import com.expediagroup.graphql.spring.operations.Query
 import com.fnb.locations.model.Location
-import com.fnb.locations.service.LocationService
+import com.fnb.locations.service.impl.LocationService
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
@@ -15,7 +15,6 @@ class LocationQuery
 
     suspend fun location(id: Int): Location {
         logger.debug("Request to get location with id $id")
-        // poo
         return locationService.getLocation(id)
 
     }

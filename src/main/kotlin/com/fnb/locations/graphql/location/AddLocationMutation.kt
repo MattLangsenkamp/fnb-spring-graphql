@@ -1,14 +1,14 @@
 package com.fnb.locations.graphql.location
 
 import com.expediagroup.graphql.spring.operations.Mutation
+import com.fnb.locations.customExceptions.NotLoggedInExceptionException
 import com.fnb.locations.model.Location
 import com.fnb.locations.model.LocationTag
-import com.fnb.locations.service.LocationService
+import com.fnb.locations.security.MyGraphQLContext
+import com.fnb.locations.service.impl.LocationService
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
-import org.springframework.transaction.annotation.Transactional
-
 
 @Component
 class AddLocationMutation
@@ -16,23 +16,26 @@ class AddLocationMutation
 
     private val logger = LoggerFactory.getLogger(javaClass)
 
-    @Transactional
-    suspend fun addLocation(name: String,
+    suspend fun addLocation(graphQLContext: MyGraphQLContext,
+                            name: String,
                             friendlyName: String,
                             description: String,
                             latitude: Double,
                             longitude: Double,
                             picture: String,
-                            typeTags: List<LocationTag>): Location {
+                            locationTags: List<LocationTag>): Location {
         logger.debug("Request to add location with name $name")
+        val loggedInUser = graphQLContext.loggedInUser
+                ?: throw NotLoggedInExceptionException("Log in to add new location")
         return locationService.addLocation(
+                loggedInUser = loggedInUser,
                 name = name,
                 friendlyName = friendlyName,
                 description = description,
                 latitude = latitude,
                 longitude = longitude,
                 picture = picture,
-                typeTags = typeTags
+                locationTags = locationTags
         )
     }
 }
