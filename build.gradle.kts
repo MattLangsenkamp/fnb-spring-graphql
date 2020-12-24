@@ -19,7 +19,7 @@ repositories {
 
 dependencies {
     implementation("com.expediagroup:graphql-kotlin-spring-server:3.6.7")
-    implementation("org.springframework.boot:spring-boot-starter-data-r2dbc")
+    implementation("org.springframework.boot:spring-boot-starter-data-r2dbc:2.4.1")
     implementation("org.springframework.boot:spring-boot-starter-security")
     //
     implementation("io.jsonwebtoken:jjwt-api:0.11.2")

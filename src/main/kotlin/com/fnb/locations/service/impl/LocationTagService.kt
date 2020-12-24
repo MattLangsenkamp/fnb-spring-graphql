@@ -5,6 +5,7 @@ import com.fnb.locations.dao.LocationTagBridgeRepository
 import com.fnb.locations.dao.LocationTagRepository
 import com.fnb.locations.model.Location
 import com.fnb.locations.model.LocationTag
+import com.fnb.locations.model.LocationTagBridge
 import com.fnb.locations.model.LoggedInUser
 import com.fnb.locations.service.LocationTagService
 import kotlinx.coroutines.coroutineScope
@@ -65,10 +66,9 @@ class LocationTagService(
         return coroutineScope {
             for (tag in tags) {
                 // TODO replace this with batching
-                locationTagBridgeRepository.save(
-                        Pair(
-                                tag.id ?: throw IllegalArgumentException("Tag must have ID"),
-                                location.id!!))
+                locationTagBridgeRepository.addLink(
+                        tagId = tag.id ?: throw IllegalArgumentException("Tag must have ID"),
+                        locationId = location.id!!)
             }
             tags
         }
@@ -81,10 +81,9 @@ class LocationTagService(
         return coroutineScope {
             for (tag in tags) {
                 // TODO replace this with batching
-                locationTagBridgeRepository.delete(
-                        Pair(
-                                tag.id ?: throw IllegalArgumentException("Tag must have ID"),
-                                location.id!!))
+                locationTagBridgeRepository.deleteLink(
+                        tagId = tag.id ?: throw IllegalArgumentException("Tag must have ID"),
+                        locationId = location.id!!)
             }
             tags
         }

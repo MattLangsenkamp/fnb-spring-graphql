@@ -57,7 +57,9 @@ class LocationService
     }
 
     override suspend fun getLocation(id: Int): Location {
-        return repo.findById(id) ?: throw Exception("no such Location")
+        val location = repo.findById(id) ?: throw Exception("no such Location")
+        location.locationTags = locationTagService.getTagsByLocation(id)
+        return location
     }
 
     override suspend fun getLocationsByUser(id: Int): List<Location> {
@@ -110,6 +112,7 @@ class LocationService
                             location = location)
 
         }
+        updatedLocation.locationTags = newLocationTags
         return updatedLocation
     }
 
