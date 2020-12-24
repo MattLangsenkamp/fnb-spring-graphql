@@ -44,10 +44,11 @@ class LocationService
                 longitude = longitude,
                 pictureURI = pictureURI,
                 needsCleaning = false,
-                locationOwner = loggedInUser.id
+                locationOwner = loggedInUser.id,
         )
         val createdLocation = repo.save(location)
-        createdLocation.locationTags = locationTagService
+
+        locationTagService
                 .assignTags(
                         loggedInUser = loggedInUser,
                         tags = locationTags,
@@ -88,8 +89,11 @@ class LocationService
                 latitude = latitude ?: location.latitude,
                 longitude = longitude ?: location.longitude,
                 pictureURI = pictureURI ?: location.pictureURI,
-                locationTags = newLocationTags ?: currentLocationTags
         )
+        // save stuff in the normal
+        repo.save(updatedLocation)
+
+        // update new tags if they changed
         if (newLocationTags != null) {
             val assignedTags = newLocationTags.filter { it !in currentLocationTags }
             val unassignedTags = currentLocationTags.filter { it in newLocationTags }
@@ -105,9 +109,8 @@ class LocationService
                             tags = unassignedTags,
                             location = location)
 
-            updatedLocation.locationTags = newLocationTags
         }
-        return repo.save(updatedLocation)
+        return updatedLocation
     }
 
     override suspend fun deleteLocation(loggedInUser: LoggedInUser, id: Int): Location {

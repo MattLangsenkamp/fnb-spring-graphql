@@ -10,7 +10,7 @@ import java.util.*
 
 
 @Table
-data class OrgUserData @Autowired(required = false) constructor(
+class OrgUserData @Autowired(required = false) constructor(
         @Id
         val id: Int? = null,
         val orgUserId: Int,
@@ -30,5 +30,24 @@ data class OrgUserData @Autowired(required = false) constructor(
         if (locations != null) return locations!!
         return locationService.getLocationsByUser(id
                 ?: throw IllegalArgumentException("user must exist to get locations"))
+    }
+
+    suspend fun copy(id: Int? = null,
+                     orgUserId: Int? = null,
+                     username: String? = null,
+                     contact: String? = null,
+                     description: String? = null,
+                     pictureURI: String? = null,
+                     locations: List<Location>? = null): OrgUserData {
+        return OrgUserData(
+                id = id ?: this.id,
+                orgUserId = orgUserId ?: this.orgUserId,
+                username = username ?: this.username,
+                contact = contact ?: this.contact,
+                description = description ?: this.description,
+                pictureURI = pictureURI ?: this.pictureURI,
+                locations = locations ?: this.locations
+        )
+
     }
 }
