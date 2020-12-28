@@ -4,6 +4,7 @@ import com.expediagroup.graphql.annotations.GraphQLIgnore
 import com.fnb.locations.service.LocationService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.annotation.Id
+import org.springframework.data.annotation.Transient
 import org.springframework.data.relational.core.mapping.Column
 import org.springframework.data.relational.core.mapping.Table
 import java.util.*
@@ -19,16 +20,16 @@ data class OrgUserData @Autowired(required = false) constructor(
         val description: String,
         @Column("picture_uri")
         val pictureURI: String,
-        @Transient
-        @GraphQLIgnore
-        var locations: List<Location>?
 ) {
-    @Autowired
-    private lateinit var locationService: LocationService
+    @Transient
+    lateinit var locations: List<Location>
 
-    suspend fun locations(): List<Location> {
-        if (locations != null) return locations!!
-        return locationService.getLocationsByUser(id
-                ?: throw IllegalArgumentException("user must exist to get locations"))
+    @GraphQLIgnore
+    fun setLocs(locs: List<Location>) {
+        locations = locs
+    }
+
+    fun locations(): List<Location> {
+        return locations
     }
 }

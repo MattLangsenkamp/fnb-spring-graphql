@@ -7,6 +7,7 @@ import com.fnb.locations.model.LocationTag
 import com.fnb.locations.model.LoggedInUser
 import com.fnb.locations.service.LocationService
 import kotlinx.coroutines.flow.toList
+import kotlinx.coroutines.runBlocking
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
@@ -63,12 +64,20 @@ class LocationService
     }
 
     override suspend fun getLocationsByUser(id: Int): List<Location> {
-        return repo.findByLocationOwner(id)
+        val locations = repo.findByLocationOwner(id)
+        for (location in locations) {
+            location.setTags(locationTagService.getTagsByLocation(location.id!!))
+        }
+        return locations
     }
 
     override suspend fun getAllLocations(): List<Location> {
         logger.debug("Retrieving all locations")
-        return repo.findAll().toList()
+        val locations = repo.findAll().toList()
+        for (location in locations) {
+            location.setTags(locationTagService.getTagsByLocation(location.id!!))
+        }
+        return locations
     }
 
     override suspend fun updateLocation(loggedInUser: LoggedInUser,
@@ -80,7 +89,7 @@ class LocationService
                                         longitude: Double?,
                                         picture: String?,
                                         newLocationTags: List<LocationTag>?): Location {
-        val location = repo.findById(id) ?: throw Exception()
+        val location = repo.findById(id) ?: throw FailedToFetchResourceException("no such location with that name")
         permissionService.authorizeLocationAction(loggedInUser, location)
         val pictureURI = if (picture != null) imageService.uploadImage(loggedInUser, picture) else null
         val currentLocationTags = locationTagService.getTagsByLocation(id)
@@ -93,10 +102,12 @@ class LocationService
                 pictureURI = pictureURI ?: location.pictureURI,
         )
         // save stuff in the normal
+        updatedLocation.setTags(currentLocationTags)
         repo.save(updatedLocation)
 
         // update new tags if they changed
         if (newLocationTags != null) {
+
             val assignedTags = newLocationTags.filter { it !in currentLocationTags }
             val unassignedTags = currentLocationTags.filter { it in newLocationTags }
 
@@ -111,8 +122,9 @@ class LocationService
                             tags = unassignedTags,
                             location = location)
 
+
         }
-        updatedLocation.locationTags = newLocationTags
+        updatedLocation.setTags(locationTagService.getTagsByLocation(id))
         return updatedLocation
     }
 

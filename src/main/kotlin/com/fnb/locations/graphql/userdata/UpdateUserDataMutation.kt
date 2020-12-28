@@ -18,11 +18,11 @@ class UpdateUserDataMutation
     suspend fun updateUserData(
             graphQLContext: MyGraphQLContext,
             id: Int,
-            username: String,
-            contact: String,
-            description: String,
-            picture: String,
-            locations: List<Location>): OrgUserData {
+            username: String?,
+            contact: String?,
+            description: String?,
+            picture: String?,
+            locations: List<Location>?): OrgUserData {
 
         logger.info("request to update user data with id ")
         val loggedInUser = graphQLContext.loggedInUser

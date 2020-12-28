@@ -2,7 +2,6 @@ package com.fnb.locations.service.impl
 
 import com.fnb.locations.customExceptions.FailedToFetchResourceException
 import com.fnb.locations.dao.UserDataRepository
-import com.fnb.locations.model.Location
 import com.fnb.locations.model.LoggedInUser
 import com.fnb.locations.model.OrgUserData
 import com.fnb.locations.service.UserDataService
@@ -17,24 +16,25 @@ class UserDataService
 @Autowired constructor(
         private val userDataRepository: UserDataRepository,
         private val imageService: ImageService,
-        private val permissionService: PermissionService) : UserDataService {
+        private val permissionService: PermissionService,
+        private val locationService: LocationService) : UserDataService {
     override suspend fun addUserData(
             loggedInUser: LoggedInUser,
             username: String,
             contact: String,
             description: String,
-            picture: String,
-            locations: List<Location>): OrgUserData {
+            picture: String): OrgUserData {
 
         val userData = OrgUserData(
                 orgUserId = loggedInUser.id,
                 username = username,
                 contact = contact,
                 description = description,
-                pictureURI = picture,
-                locations = locations)
+                pictureURI = picture)
 
-        return userDataRepository.save(userData)
+        val savedUserData = userDataRepository.save(userData)
+        savedUserData.setLocs(locationService.getLocationsByUser(loggedInUser.id))
+        return savedUserData
     }
 
     override suspend fun deleteUserData(loggedInUser: LoggedInUser, id: Int): OrgUserData {
@@ -46,12 +46,25 @@ class UserDataService
     }
 
     override suspend fun getAllUserData(): List<OrgUserData> {
-        return userDataRepository.findAll().toList()
+        val userData = userDataRepository.findAll().toList()
+        for (ud in userData) {
+            ud.setLocs(locationService.getLocationsByUser(ud.orgUserId))
+        }
+        return userData
+    }
+
+    override suspend fun getUserDataByOrgUser(orgUserId: Int): OrgUserData {
+        val userData = userDataRepository.findByOrgUserId(orgUserId)
+                ?: throw FailedToFetchResourceException("No such user data with that id")
+        userData.setLocs(locationService.getLocationsByUser(userData.orgUserId))
+        return userData
     }
 
     override suspend fun getUserData(id: Int): OrgUserData {
-        return userDataRepository.findById(id)
+        val userData = userDataRepository.findById(id)
                 ?: throw FailedToFetchResourceException("No such user data with that id")
+        userData.setLocs(locationService.getLocationsByUser(userData.orgUserId))
+        return userData
     }
 
     override suspend fun updateUserData(loggedInUser: LoggedInUser,
@@ -73,6 +86,5 @@ class UserDataService
                 description = description ?: currentUserData.description,
                 pictureURI = newPicture,
         )
-
     }
 }

@@ -13,7 +13,7 @@ class LocationTagQuery
 
     private val logger = LoggerFactory.getLogger(javaClass)
 
-    suspend fun looationTag(id: Int): LocationTag {
+    suspend fun locationTag(id: Int): LocationTag {
         return locationTagService.getTag(id)
     }
 }

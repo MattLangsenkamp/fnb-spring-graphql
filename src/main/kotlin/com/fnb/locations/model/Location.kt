@@ -1,7 +1,9 @@
 package com.fnb.locations.model
 
 
+import com.expediagroup.graphql.annotations.GraphQLIgnore
 import org.springframework.data.annotation.Id
+import org.springframework.data.annotation.Transient
 import java.time.Instant
 import org.springframework.data.relational.core.mapping.Table
 
@@ -19,6 +21,15 @@ data class Location(
         val locationOwner: Int,
         val needsCleaning: Boolean,
         val creationDateTime: String = Instant.now().toString(),
-        var locationTags: List<LocationTag>? = null
-)
+) {
+    @Transient
+    lateinit var locationTags: List<LocationTag>
+
+    @GraphQLIgnore
+    fun setTags(tags: List<LocationTag>) {
+        locationTags = tags
+    }
+
+    fun locationTags(): List<LocationTag> = locationTags
+}
 

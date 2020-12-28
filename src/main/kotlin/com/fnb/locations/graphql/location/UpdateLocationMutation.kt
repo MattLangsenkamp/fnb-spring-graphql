@@ -18,13 +18,13 @@ class UpdateLocationMutation
 
     suspend fun updateLocation(graphQLContext: MyGraphQLContext,
                                id: Int,
-                               name: String,
-                               friendlyName: String,
-                               description: String,
-                               latitude: Double,
-                               longitude: Double,
-                               picture: String,
-                               typeTags: List<LocationTag>): Location {
+                               name: String?,
+                               friendlyName: String?,
+                               description: String?,
+                               latitude: Double?,
+                               longitude: Double?,
+                               picture: String?,
+                               typeTags: List<LocationTag>?): Location {
         logger.debug("request to update location with id: $id received")
 
         val loggedInUser = graphQLContext.loggedInUser

@@ -32,6 +32,7 @@ class PermissionService : PermissionService {
     }
 
     override suspend fun authorizeLocationTagAction(loggedInUser: LoggedInUser, locationTag: LocationTag) {
+        if (loggedInUser.id == locationTag.ownerId) return
         if (loggedInUser.permissionLevel == UserPermissionLevel.ADMIN ||
                 loggedInUser.permissionLevel == UserPermissionLevel.SUPER_ADMIN) return
         throw InsufficientPermissionsException("Do not have permission to touch tag")

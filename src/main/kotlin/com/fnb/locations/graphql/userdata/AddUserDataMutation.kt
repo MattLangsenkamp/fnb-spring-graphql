@@ -20,8 +20,7 @@ class AddUserDataMutation
             username: String,
             contact: String,
             description: String,
-            picture: String,
-            locations: List<Location> = emptyList()): OrgUserData {
+            picture: String): OrgUserData {
 
         logger.debug("request to add user data received")
         val loggedInUser = graphQLContext.loggedInUser
@@ -31,8 +30,7 @@ class AddUserDataMutation
                 username,
                 contact,
                 description,
-                picture,
-                locations
+                picture
         )
     }
 }

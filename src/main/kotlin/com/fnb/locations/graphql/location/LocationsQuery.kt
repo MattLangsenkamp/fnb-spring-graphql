@@ -13,8 +13,13 @@ class LocationsQuery
 
     private val logger = LoggerFactory.getLogger(javaClass)
 
-    suspend fun locations(): List<Location> {
+    suspend fun locations(id: Int?): List<Location> {
         logger.debug("request to get all locations received")
-        return locationService.getAllLocations()
+
+        return if (id != null) {
+            locationService.getLocationsByUser(id)
+        } else {
+            locationService.getAllLocations()
+        }
     }
 }

@@ -10,12 +10,13 @@ interface UserDataService {
             username: String,
             contact: String,
             description: String,
-            picture: String,
-            locations: List<Location>): OrgUserData
+            picture: String): OrgUserData
 
     suspend fun deleteUserData(loggedInUser: LoggedInUser, id: Int): OrgUserData
 
     suspend fun getAllUserData(): List<OrgUserData>
+
+    suspend fun getUserDataByOrgUser(orgUserId: Int): OrgUserData
 
     suspend fun getUserData(id: Int): OrgUserData
 

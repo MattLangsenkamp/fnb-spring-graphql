@@ -45,7 +45,7 @@ END $$;
 
 create TABLE if not exists org_user_data(
     id int PRIMARY KEY generated always as identity,
-    org_user_id int NOT NULL REFERENCES org_user(id) ON delete CASCADE,
+    org_user_id int unique NOT NULL REFERENCES org_user(id) ON delete CASCADE,
     username VARCHAR(255) NOT NULL,
     contact VARCHAR(510) NOT NULL,
     description VARCHAR(765) NOT NULL,
