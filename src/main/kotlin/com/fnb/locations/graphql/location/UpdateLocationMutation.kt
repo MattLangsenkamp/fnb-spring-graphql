@@ -26,7 +26,7 @@ class UpdateLocationMutation
                                picture: String?,
                                typeTags: List<LocationTag>?): Location {
         logger.debug("request to update location with id: $id received")
-
+// okk
         val loggedInUser = graphQLContext.loggedInUser
                 ?: throw NotLoggedInExceptionException("Log in to add new location")
         return locationService.updateLocation(
