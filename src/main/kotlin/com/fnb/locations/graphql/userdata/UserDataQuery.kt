@@ -1,6 +1,7 @@
 package com.fnb.locations.graphql.userdata
 
 import com.expediagroup.graphql.spring.operations.Query
+import com.fnb.locations.customExceptions.IllegalArgumentException
 import com.fnb.locations.model.OrgUserData
 import com.fnb.locations.service.impl.UserDataService
 import org.slf4j.LoggerFactory
@@ -12,9 +13,18 @@ class UserDataQuery
 @Autowired constructor(private val userDataService: UserDataService) : Query {
     private val logger = LoggerFactory.getLogger(javaClass)
 
-    suspend fun userData(id: Int): OrgUserData {
-        logger.debug("request to get user data with id: $id received")
+    suspend fun userData(userDataId: Int?, orgUserId: Int?): OrgUserData {
 
-        return userDataService.getUserData(id)
+        logger.info(userDataId.toString())
+        logger.info(orgUserId.toString())
+        return if (userDataId != null) {
+            logger.info("request to get user data with user data id: $userDataId received")
+            userDataService.getUserData(userDataId)
+        } else if (orgUserId != null) {
+            logger.debug("request to get user data with user data id: $userDataId received")
+            userDataService.getUserDataByOrgUser(orgUserId)
+        } else {
+            throw IllegalArgumentException("Must provide either a userDataId or a orgUserId")
+        }
     }
 }

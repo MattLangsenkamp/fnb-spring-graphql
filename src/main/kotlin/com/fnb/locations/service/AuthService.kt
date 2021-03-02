@@ -9,6 +9,7 @@ interface AuthService {
     suspend fun signTokens(user: OrgUser): Tokens
     suspend fun verifyAndRefreshTokensOrClear(accessToken: String, refreshToken: String): Tokens
     suspend fun getLoggedInUser(accessToken: String): LoggedInUser?
-    suspend fun signUp(email: String, password: String, permissionLevel: UserPermissionLevel): Tokens
+    suspend fun signUp(email: String, password: String, permissionLevel: UserPermissionLevel): OrgUser
     suspend fun signIn(email: String, password: String): Tokens
+    suspend fun  deleteUser(loggedInUser: LoggedInUser, id: Int): LoggedInUser
 }

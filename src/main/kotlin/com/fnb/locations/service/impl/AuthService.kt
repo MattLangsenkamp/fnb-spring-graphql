@@ -1,5 +1,6 @@
 package com.fnb.locations.service.impl
 
+import com.fnb.locations.customExceptions.FailedToFetchResourceException
 import com.fnb.locations.customExceptions.InvalidCredentialsException
 import com.fnb.locations.dao.UserRepository
 import com.fnb.locations.model.LoggedInUser
@@ -25,6 +26,7 @@ import java.util.*
 class AuthService(
         @Autowired private val env: Environment,
         @Autowired private val passwordEncoder: PasswordEncoder,
+        @Autowired private val permissionService: PermissionService,
         @Autowired private val userRepository: UserRepository) : AuthService {
 
     private val secretKey = Keys.hmacShaKeyFor(
@@ -94,21 +96,27 @@ class AuthService(
     }
 
 
-    override suspend fun signUp(email: String, password: String, permissionLevel: UserPermissionLevel): Tokens {
+    override suspend fun signUp(email: String, password: String, permissionLevel: UserPermissionLevel): OrgUser {
         val user = OrgUser(
                 email = email,
                 userPassword = passwordEncoder.encode(password),
                 count = 0,
                 permissionLevel = UserPermissionLevel.USER // change later
         )
-        val savedUser = userRepository.save(user)
-        return signTokens(savedUser)
+        return userRepository.save(user)
     }
 
     override suspend fun signIn(email: String, password: String): Tokens {
-        val user = userRepository.findByEmail(email)
+        val user = userRepository.findByEmail(email) ?: throw FailedToFetchResourceException("No user with that email")
         if (passwordEncoder.matches(password, user.userPassword)) return signTokens(user)
         else throw InvalidCredentialsException("username or password is not correct")
+    }
+
+    override suspend fun  deleteUser(loggedInUser: LoggedInUser, id: Int): LoggedInUser {
+        val user = userRepository.findById(id) ?: throw FailedToFetchResourceException("No user with that id")
+        permissionService.authorizeUserAction(loggedInUser, user)
+        userRepository.deleteById(id)
+        return user.toLoggedInUser()
     }
 
     private suspend fun getCount(refreshToken: String): Int {

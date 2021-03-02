@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.toList
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import kotlin.random.Random
 
 @Service
 @Transactional
@@ -18,6 +19,8 @@ class UserDataService
         private val imageService: ImageService,
         private val permissionService: PermissionService,
         private val locationService: LocationService) : UserDataService {
+
+    @Transactional
     override suspend fun addUserData(
             loggedInUser: LoggedInUser,
             username: String,
@@ -25,12 +28,15 @@ class UserDataService
             description: String,
             picture: String): OrgUserData {
 
+        val randInt1= Random.nextInt(from =250, until = 400)
+        val randInt2= Random.nextInt(from =250, until = 400)
+
         val userData = OrgUserData(
                 orgUserId = loggedInUser.id,
                 username = username,
                 contact = contact,
                 description = description,
-                pictureURI = picture)
+                pictureURI = "http://placekitten.com/$randInt1/$randInt2")
 
         val savedUserData = userDataRepository.save(userData)
         savedUserData.setLocs(locationService.getLocationsByUser(loggedInUser.id))
@@ -80,11 +86,14 @@ class UserDataService
                 if (picture != null)
                     imageService.uploadImage(loggedInUser, picture)
                 else currentUserData.pictureURI
-        return currentUserData.copy(
+        val newUserData = currentUserData.copy(
                 username = username ?: currentUserData.username,
                 contact = contact ?: currentUserData.contact,
                 description = description ?: currentUserData.description,
                 pictureURI = newPicture,
         )
+        val finalUserData = userDataRepository.save(newUserData)
+        finalUserData.setLocs(locationService.getLocationsByUser(currentUserData.orgUserId))
+        return finalUserData
     }
 }

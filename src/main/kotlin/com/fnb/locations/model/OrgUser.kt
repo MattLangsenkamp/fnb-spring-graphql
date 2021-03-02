@@ -11,4 +11,9 @@ open class OrgUser(
         val userPassword: String,
         val count: Int,
         val permissionLevel: UserPermissionLevel
-)
+) {
+        fun toLoggedInUser(): LoggedInUser = LoggedInUser(
+                id = this.id ?: throw IllegalArgumentException("user not yet persisted"),
+                email = this.email,
+                permissionLevel = this.permissionLevel)
+}

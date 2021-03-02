@@ -23,9 +23,9 @@ class MyGraphQLContextFactory(@Autowired private val authService: AuthService) :
                 request.headers.getFirst("AccessToken") ?: "",
                 request.headers.getFirst("RefreshToken") ?: "")
 
-        logger.info(request.headers.getFirst("RefreshToken"))
         logger.info(request.headers.getFirst("AccessToken"))
-
+        logger.info(request.headers.getFirst("RefreshToken"))
+        logger.info(request.queryParams.toString())
         response.headers.set("AccessToken", tokens.accessToken)
         response.headers.set("RefreshToken", tokens.refreshToken)
 
@@ -33,6 +33,4 @@ class MyGraphQLContextFactory(@Autowired private val authService: AuthService) :
                 loggedInUser = authService.getLoggedInUser(tokens.accessToken)
         )
     }
-
-
 }

@@ -13,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.util.*
-
+import kotlin.random.Random
 @Service
 @Transactional
 class LocationService
@@ -36,7 +36,10 @@ class LocationService
                                      locationTags: List<LocationTag>
     ): Location {
         logger.debug("Creating new location named $name")
-        val pictureURI = "goober"//imageService.uploadImage(picture)
+
+        val randInt1= Random.nextInt(from =250, until = 400)
+        val randInt2= Random.nextInt(from =250, until = 400)
+        val pictureURI = "https://placeimg.com/$randInt1/$randInt2/arch/sepia"
         val location = Location(
                 locationName = name,
                 friendlyName = friendlyName,
@@ -47,13 +50,15 @@ class LocationService
                 needsCleaning = false,
                 locationOwner = loggedInUser.id,
         )
+        location.setTags(locationTags)
         val createdLocation = repo.save(location)
 
-        locationTagService
+        val assignedTags = locationTagService
                 .assignTags(
                         loggedInUser = loggedInUser,
                         tags = locationTags,
                         location = createdLocation)
+        createdLocation.setTags(assignedTags)
         return createdLocation
     }
 
@@ -131,6 +136,7 @@ class LocationService
     override suspend fun deleteLocation(loggedInUser: LoggedInUser, id: Int): Location {
 
         val currentLocation = repo.findById(id) ?: throw FailedToFetchResourceException("Location does not exist")
+        currentLocation.locationTags = locationTagService.getTagsByLocation(id)
         permissionService.authorizeLocationAction(loggedInUser, currentLocation)
         repo.deleteById(id)
         return currentLocation

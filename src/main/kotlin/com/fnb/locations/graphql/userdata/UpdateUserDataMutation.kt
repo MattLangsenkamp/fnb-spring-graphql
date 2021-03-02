@@ -26,7 +26,7 @@ class UpdateUserDataMutation
 
         logger.info("request to update user data with id ")
         val loggedInUser = graphQLContext.loggedInUser
-                ?: throw NotLoggedInExceptionException("Log in to add new location")
+                ?: throw NotLoggedInExceptionException("Log in to update user")
         return userDataService.updateUserData(
                 loggedInUser,
                 id,

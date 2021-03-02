@@ -14,7 +14,7 @@ class PermissionService : PermissionService {
         if (loggedInUser.id == user.id) return
         if (loggedInUser.permissionLevel == UserPermissionLevel.ADMIN ||
                 loggedInUser.permissionLevel == UserPermissionLevel.SUPER_ADMIN) return
-        throw InsufficientPermissionsException("Do not have permission to touch use")
+        throw InsufficientPermissionsException("Do not have permission to touch user")
     }
 
     override suspend fun authorizeUserDataAction(loggedInUser: LoggedInUser, userData: OrgUserData) {

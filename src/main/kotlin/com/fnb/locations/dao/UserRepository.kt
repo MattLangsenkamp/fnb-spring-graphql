@@ -9,5 +9,5 @@ import org.springframework.stereotype.Repository
 interface UserRepository : CoroutineCrudRepository<OrgUser, Int> {
 
     @Query(value = "select * from org_user ou where ou.email = $1")
-    suspend fun findByEmail(email: String): OrgUser
+    suspend fun findByEmail(email: String): OrgUser?
 }
