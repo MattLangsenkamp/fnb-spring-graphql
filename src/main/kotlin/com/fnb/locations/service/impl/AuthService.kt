@@ -10,7 +10,7 @@ import com.fnb.locations.model.UserPermissionLevel
 import com.fnb.locations.service.AuthService
 import io.jsonwebtoken.ExpiredJwtException
 import org.springframework.stereotype.Service
-import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.security.Keys
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.core.env.Environment
@@ -112,7 +112,7 @@ class AuthService(
         else throw InvalidCredentialsException("username or password is not correct")
     }
 
-    override suspend fun  deleteUser(loggedInUser: LoggedInUser, id: Int): LoggedInUser {
+    override suspend fun deleteUser(loggedInUser: LoggedInUser, id: Int): LoggedInUser {
         val user = userRepository.findById(id) ?: throw FailedToFetchResourceException("No user with that id")
         permissionService.authorizeUserAction(loggedInUser, user)
         userRepository.deleteById(id)

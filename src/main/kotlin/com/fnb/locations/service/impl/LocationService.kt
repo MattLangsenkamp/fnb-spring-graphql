@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.util.*
 import kotlin.random.Random
+
 @Service
 @Transactional
 class LocationService
@@ -37,9 +38,9 @@ class LocationService
     ): Location {
         logger.debug("Creating new location named $name")
 
-        val randInt1= Random.nextInt(from =250, until = 400)
-        val randInt2= Random.nextInt(from =250, until = 400)
-        val pictureURI = "https://placeimg.com/$randInt1/$randInt2/arch/sepia"
+        imageService.uploadImage(loggedInUser, picture)
+        val pictureURI = imageService.uploadImage(loggedInUser, picture)
+
         val location = Location(
                 locationName = name,
                 friendlyName = friendlyName,
