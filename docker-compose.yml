@@ -1,6 +1,13 @@
 version: '3.7'
 
 services:
+  locations:
+    image: rocfnb/locations
+    depends_on:
+      - db
+      - minio1
+    ports:
+      - 8080:8080
   db:
     image: postgres
     restart: always

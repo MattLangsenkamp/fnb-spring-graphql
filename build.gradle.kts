@@ -1,16 +1,20 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
+
+val shadowJarNamePrefix = "fnb-app"
 
 plugins {
     id("org.springframework.boot") version "2.4.0"
     id("io.spring.dependency-management") version "1.0.10.RELEASE"
+    id("com.github.johnrengelman.shadow") version "6.1.0"
     kotlin("jvm") version "1.4.10"
     kotlin("plugin.spring") version "1.4.10"
     kotlin("kapt") version "1.4.10"
-}
 
+}
 group = "com.fnb"
-version = "0.0.1-SNAPSHOT"
+version = ""
 java.sourceCompatibility = JavaVersion.VERSION_11
 
 repositories {
@@ -21,6 +25,7 @@ dependencies {
     implementation("com.expediagroup:graphql-kotlin-spring-server:3.6.7")
     implementation("org.springframework.boot:spring-boot-starter-data-r2dbc:2.4.1")
     implementation("org.springframework.boot:spring-boot-starter-security:2.4.3")
+    implementation("org.springframework.boot:spring-boot-starter-webflux:2.4.4")
     //
     implementation("io.jsonwebtoken:jjwt-api:0.11.2")
     implementation("io.jsonwebtoken:jjwt-impl:0.11.2")
@@ -51,3 +56,20 @@ tasks.withType<KotlinCompile> {
         jvmTarget = "11"
     }
 }
+tasks {
+    named<ShadowJar>("shadowJar") {
+        archiveBaseName.set(shadowJarNamePrefix)
+        isZip64 = true // required if you have tons of files
+        mergeServiceFiles()
+        manifest {
+            // For: MyApp.kt
+            attributes(mapOf("Main-Class" to "com.fnb.locations.FnbSpringGraphqlApplicationKt"))
+        }
+    }
+}
+
+
+
+
+
+

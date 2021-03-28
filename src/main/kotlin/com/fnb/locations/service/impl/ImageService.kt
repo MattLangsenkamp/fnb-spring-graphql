@@ -6,6 +6,7 @@ import io.minio.*
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.beans.factory.annotation.Value
 import java.time.Instant
 import java.util.*
 import kotlin.random.Random
@@ -14,6 +15,9 @@ import kotlin.random.Random
 class ImageService(@Autowired private val minioClient: MinioClient) : ImageService {
 
     private val logger = LoggerFactory.getLogger(javaClass)
+
+    @Value("\${minio.external.url}")
+    lateinit var minioExternalUrl: String
 
     private final val bucket: String = "pictures"
 
@@ -51,12 +55,12 @@ class ImageService(@Autowired private val minioClient: MinioClient) : ImageServi
                         .userMetadata(
                                 mapOf("Content-type" to "image"))
                         .headers(
-                                mapOf("'Content-type" to "image//*"))
+                                mapOf("Content-type" to "image//*"))
                         .build())
         //send it
         //this.minioClient.uploadObject()
 
-        return "http://localhost:9000/pictures/$uniqueFileName"
+        return "$minioExternalUrl/pictures/$uniqueFileName"
     }
 
     override fun deleteImage(loggedInUser: LoggedInUser, img: String): String {
