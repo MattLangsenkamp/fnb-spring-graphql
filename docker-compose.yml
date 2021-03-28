@@ -2,8 +2,6 @@ version: '3.7'
 
 services:
   locations:
-    secrets:
-      - psql_password
     image: rocfnb/locations
     depends_on:
       - db
