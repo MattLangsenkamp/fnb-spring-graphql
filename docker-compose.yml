@@ -10,7 +10,10 @@ services:
       - minio1
     ports:
       - 8080:8080
+    restart: always
   db:
+    networks:
+      backend:
     image: postgres
     restart: always
     environment:
