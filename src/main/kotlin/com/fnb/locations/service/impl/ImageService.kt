@@ -21,10 +21,26 @@ class ImageService(@Autowired private val minioClient: MinioClient) : ImageServi
 
     private final val bucket: String = "pictures"
 
+    private final val policy: String = """
+        {
+         "Statement": [
+                 {
+                     "Action": "*",
+                     "Effect": "Allow",
+                     "Principal": "*",
+                     "Resource": "arn:aws:s3:::pictures"
+                 }
+             ],
+             "Version": "2012-10-17"
+         }
+    """.trimIndent()
+
     init {
         if (!minioClient.bucketExists(BucketExistsArgs.builder().bucket(bucket).build())) {
             // add public/ prefix
             minioClient.makeBucket(MakeBucketArgs.builder().bucket(bucket).build())
+            minioClient.setBucketPolicy(
+                    SetBucketPolicyArgs.builder().bucket(bucket).config(policy).build())
         }
     }
 

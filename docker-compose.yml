@@ -3,7 +3,7 @@ version: '3.7'
 services:
   locations:
     networks:
-      backend:
+      - backend
     image: rocfnb/locations
     depends_on:
       - db
@@ -13,7 +13,7 @@ services:
     restart: always
   db:
     networks:
-      backend:
+      - backend
     image: postgres
     restart: always
     environment:
