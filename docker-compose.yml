@@ -4,18 +4,15 @@ services:
   locations:
     networks:
       - backend
-    image: rocfnb/locations
-    depends_on:
-      - db
-      - minio1
+    image: rocfnb/locations:test
     ports:
-      - 8080:8080
+      - "8080:8080"
+
     restart: always
   db:
     networks:
       - backend
     image: postgres
-    restart: always
     environment:
       POSTGRES_PASSWORD: example
       POSTGRES_USER: fnb
@@ -27,7 +24,7 @@ services:
   minio1:
     image: minio/minio:RELEASE.2021-03-04T00-53-13Z
     networks:
-      backend:
+      - backend
     volumes:
       - object-data:/data
     ports:
@@ -47,7 +44,6 @@ services:
 volumes:
   db-data:
   object-data:
-
 
 networks:
   backend:

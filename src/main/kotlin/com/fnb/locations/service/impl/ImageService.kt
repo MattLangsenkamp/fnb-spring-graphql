@@ -25,10 +25,9 @@ class ImageService(@Autowired private val minioClient: MinioClient) : ImageServi
         {
          "Statement": [
                  {
-                     "Action": "*",
+                     "Action": ["s3:PutObject"],
                      "Effect": "Allow",
-                     "Principal": "*",
-                     "Resource": "arn:aws:s3:::pictures"
+                     "Resource": "arn:aws:s3:::pictures/*"
                  }
              ],
              "Version": "2012-10-17"
@@ -39,8 +38,8 @@ class ImageService(@Autowired private val minioClient: MinioClient) : ImageServi
         if (!minioClient.bucketExists(BucketExistsArgs.builder().bucket(bucket).build())) {
             // add public/ prefix
             minioClient.makeBucket(MakeBucketArgs.builder().bucket(bucket).build())
-            minioClient.setBucketPolicy(
-                    SetBucketPolicyArgs.builder().bucket(bucket).config(policy).build())
+            //minioClient.setBucketPolicy(
+            //      SetBucketPolicyArgs.builder().bucket(bucket).config(policy).build())
         }
     }
 
