@@ -11,5 +11,5 @@ RUN tar -xvf zulu14.28.21-ca-jre14.0.1-linux_musl_x64.tar.gz
 
 EXPOSE 8080
 
-COPY /build/libs/locations.jar .
+COPY --from=builder /build/libs/locations.jar .
 CMD ["/zulu14.28.21-ca-jre14.0.1-linux_musl_x64/bin/java", "-jar", "/locations.jar", "--spring.config.name=container.application"]
