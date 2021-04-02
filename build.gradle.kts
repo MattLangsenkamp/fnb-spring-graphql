@@ -5,7 +5,7 @@ import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 val shadowJarNamePrefix = "fnb-app"
 
 plugins {
-    id("org.springframework.boot") version "2.4.0"
+    id("org.springframework.boot") version "2.4.2"
     id("io.spring.dependency-management") version "1.0.10.RELEASE"
     id("com.github.johnrengelman.shadow") version "6.1.0"
     kotlin("jvm") version "1.4.10"
@@ -22,9 +22,9 @@ repositories {
 }
 
 dependencies {
-    implementation("com.expediagroup:graphql-kotlin-spring-server:3.6.7")
-    implementation("org.springframework.boot:spring-boot-starter-data-r2dbc:2.4.1")
-    implementation("org.springframework.boot:spring-boot-starter-security:2.4.3")
+    implementation("com.expediagroup:graphql-kotlin-spring-server:3.6.8")
+    implementation("org.springframework.boot:spring-boot-starter-data-r2dbc:2.4.4")
+    implementation("org.springframework.boot:spring-boot-starter-security:2.4.4")
     implementation("org.springframework.boot:spring-boot-starter-webflux:2.4.4")
     //
     implementation("io.jsonwebtoken:jjwt-api:0.11.2")
@@ -40,7 +40,7 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor:1.4.2")
     runtimeOnly("io.r2dbc:r2dbc-postgresql")
     runtimeOnly("org.postgresql:postgresql")
-    kapt("org.springframework.boot:spring-boot-configuration-processor:2.4.0")
+    kapt("org.springframework.boot:spring-boot-configuration-processor:2.4.4")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("io.projectreactor:reactor-test:3.4.3")
