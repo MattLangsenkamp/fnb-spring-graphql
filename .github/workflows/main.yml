@@ -44,7 +44,7 @@ jobs:
       - name: deploy stack
         uses: garygrossgarten/github-action-ssh@release
         with:
-          command: docker stack deploy -c docker-compose.yml rocfreestands
+          command: docker-compose up --force-recreate
           host: 68.183.203.29
           username: root
           passphrase: ${{ secrets.PASSPHRASE }}

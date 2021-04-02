@@ -4,7 +4,7 @@ services:
   locations:
     networks:
       - backend
-    image: rocfnb/locations:test
+    image: rocfnb/locations:latest
     ports:
       - "8080:8080"
 
