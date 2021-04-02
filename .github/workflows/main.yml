@@ -31,6 +31,7 @@ jobs:
         with:
           push: true
           tags: rocfnb/locations:latest
+          no-cache: true
       - name: copy file via ssh password
         uses: appleboy/scp-action@master
         with:
