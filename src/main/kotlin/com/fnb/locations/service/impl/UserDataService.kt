@@ -28,15 +28,13 @@ class UserDataService
             description: String,
             picture: String): OrgUserData {
 
-        val randInt1= Random.nextInt(from =250, until = 400)
-        val randInt2= Random.nextInt(from =250, until = 400)
-
+        val pictureURI = imageService.uploadImage(loggedInUser, picture)
         val userData = OrgUserData(
                 orgUserId = loggedInUser.id,
                 username = username,
                 contact = contact,
                 description = description,
-                pictureURI = "http://placekitten.com/$randInt1/$randInt2")
+                pictureURI = pictureURI)
 
         val savedUserData = userDataRepository.save(userData)
         savedUserData.setLocs(locationService.getLocationsByUser(loggedInUser.id))

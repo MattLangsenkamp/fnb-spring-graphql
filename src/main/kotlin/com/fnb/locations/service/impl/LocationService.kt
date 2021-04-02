@@ -38,7 +38,6 @@ class LocationService
     ): Location {
         logger.debug("Creating new location named $name")
 
-        imageService.uploadImage(loggedInUser, picture)
         val pictureURI = imageService.uploadImage(loggedInUser, picture)
 
         val location = Location(
@@ -97,6 +96,7 @@ class LocationService
                                         newLocationTags: List<LocationTag>?): Location {
         val location = repo.findById(id) ?: throw FailedToFetchResourceException("no such location with that name")
         permissionService.authorizeLocationAction(loggedInUser, location)
+        // delete old image
         val pictureURI = if (picture != null) imageService.uploadImage(loggedInUser, picture) else null
         val currentLocationTags = locationTagService.getTagsByLocation(id)
         val updatedLocation = location.copy(
@@ -137,6 +137,7 @@ class LocationService
     override suspend fun deleteLocation(loggedInUser: LoggedInUser, id: Int): Location {
 
         val currentLocation = repo.findById(id) ?: throw FailedToFetchResourceException("Location does not exist")
+        // delete image
         currentLocation.locationTags = locationTagService.getTagsByLocation(id)
         permissionService.authorizeLocationAction(loggedInUser, currentLocation)
         repo.deleteById(id)

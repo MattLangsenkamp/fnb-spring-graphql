@@ -75,10 +75,14 @@ class ImageService(@Autowired private val minioClient: MinioClient) : ImageServi
         //send it
         //this.minioClient.uploadObject()
 
-        return "$minioExternalUrl/pictures/$uniqueFileName"
+        return "https://$minioExternalUrl/pictures/$uniqueFileName"
     }
 
     override fun deleteImage(loggedInUser: LoggedInUser, img: String): String {
         TODO("Not yet implemented")
+    }
+
+    override fun getPresignedUrl(loggedInUser: LoggedInUser): Pair<String, String> {
+        return Pair("", "")
     }
 }
