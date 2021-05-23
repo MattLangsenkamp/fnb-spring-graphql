@@ -38,7 +38,8 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor:1.4.2")
-    runtimeOnly("io.r2dbc:r2dbc-postgresql")
+    //implementation("org.postgresql:r2dbc-postgresql:0.9.0.M1")
+    implementation("io.r2dbc:r2dbc-postgresql:0.8.7.RELEASE")
     runtimeOnly("org.postgresql:postgresql")
     kapt("org.springframework.boot:spring-boot-configuration-processor:2.4.4")
 

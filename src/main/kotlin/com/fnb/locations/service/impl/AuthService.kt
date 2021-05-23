@@ -115,6 +115,8 @@ class AuthService(
     override suspend fun deleteUser(loggedInUser: LoggedInUser, id: Int): LoggedInUser {
         val user = userRepository.findById(id) ?: throw FailedToFetchResourceException("No user with that id")
         permissionService.authorizeUserAction(loggedInUser, user)
+
+        // todo delete pics
         userRepository.deleteById(id)
         return user.toLoggedInUser()
     }

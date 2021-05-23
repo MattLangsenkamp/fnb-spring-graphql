@@ -4,10 +4,8 @@ import com.fnb.locations.customExceptions.InsufficientPermissionsException
 import com.fnb.locations.model.*
 import com.fnb.locations.service.PermissionService
 import org.springframework.stereotype.Service
-import org.springframework.transaction.annotation.Transactional
 
 @Service
-@Transactional
 class PermissionService : PermissionService {
 
     override suspend fun authorizeUserAction(loggedInUser: LoggedInUser, user: OrgUser) {
@@ -37,4 +35,12 @@ class PermissionService : PermissionService {
                 loggedInUser.permissionLevel == UserPermissionLevel.SUPER_ADMIN) return
         throw InsufficientPermissionsException("Do not have permission to touch tag")
     }
+
+    override suspend fun authorizeImageAction(loggedInUser: LoggedInUser, imageUrl: ImageUrl) {
+        if (loggedInUser.id == imageUrl.ownerId) return
+        if (loggedInUser.permissionLevel == UserPermissionLevel.ADMIN ||
+                loggedInUser.permissionLevel == UserPermissionLevel.SUPER_ADMIN) return
+        throw InsufficientPermissionsException("Do not have permission to touch image")
+    }
+
 }

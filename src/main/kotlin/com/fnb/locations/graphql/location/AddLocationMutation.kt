@@ -22,7 +22,6 @@ class AddLocationMutation
                             description: String,
                             latitude: Double,
                             longitude: Double,
-                            picture: String,
                             locationTags: List<LocationTag>): Location {
         logger.debug("Request to add location with name $name")
         val loggedInUser = graphQLContext.loggedInUser
@@ -34,7 +33,6 @@ class AddLocationMutation
                 description = description,
                 latitude = latitude,
                 longitude = longitude,
-                picture = picture,
                 locationTags = locationTags
         )
     }

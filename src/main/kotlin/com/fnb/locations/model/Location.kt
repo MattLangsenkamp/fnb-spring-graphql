@@ -17,7 +17,6 @@ data class Location(
         val description: String,
         val latitude: Double,
         val longitude: Double,
-        val pictureURI: String,
         val locationOwner: Int,
         val needsCleaning: Boolean,
         val creationDateTime: String = Instant.now().toString(),
@@ -31,5 +30,15 @@ data class Location(
     }
 
     fun locationTags(): List<LocationTag> = locationTags
+
+    @Transient
+    lateinit var imageUrls: List<ImageUrl>
+
+    @GraphQLIgnore
+    fun setUrls(urls: List<ImageUrl>) {
+        imageUrls = urls
+    }
+
+    fun imageUrls(): List<ImageUrl> = imageUrls
 }
 

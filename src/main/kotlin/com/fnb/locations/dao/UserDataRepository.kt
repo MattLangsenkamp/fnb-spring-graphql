@@ -10,4 +10,5 @@ interface UserDataRepository : CoroutineCrudRepository<OrgUserData, Int> {
 
     @Query("select * from org_user_data oud where oud.org_user_id = :id")
     suspend fun findByOrgUserId(id: Int): OrgUserData?
+
 }

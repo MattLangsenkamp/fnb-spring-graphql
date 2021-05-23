@@ -20,8 +20,8 @@ import kotlin.random.Random
 class LocationService
 @Autowired constructor(
         private val repo: LocationRepository,
-        private val imageService: ImageService,
         private val locationTagService: LocationTagService,
+        private val imageService: ImageService,
         private val permissionService: PermissionService) : LocationService {
 
     private val logger = LoggerFactory.getLogger(javaClass)
@@ -33,12 +33,10 @@ class LocationService
                                      description: String,
                                      latitude: Double,
                                      longitude: Double,
-                                     picture: String,
                                      locationTags: List<LocationTag>
     ): Location {
         logger.debug("Creating new location named $name")
 
-        val pictureURI = imageService.uploadImage(loggedInUser, picture)
 
         val location = Location(
                 locationName = name,
@@ -46,7 +44,6 @@ class LocationService
                 description = description,
                 latitude = latitude,
                 longitude = longitude,
-                pictureURI = pictureURI,
                 needsCleaning = false,
                 locationOwner = loggedInUser.id,
         )
@@ -59,12 +56,14 @@ class LocationService
                         tags = locationTags,
                         location = createdLocation)
         createdLocation.setTags(assignedTags)
+        createdLocation.setUrls(listOf())
         return createdLocation
     }
 
     override suspend fun getLocation(id: Int): Location {
         val location = repo.findById(id) ?: throw Exception("no such Location")
         location.locationTags = locationTagService.getTagsByLocation(id)
+        location.setUrls(imageService.getAllImagesByOwner(id, "location"))
         return location
     }
 
@@ -72,6 +71,7 @@ class LocationService
         val locations = repo.findByLocationOwner(id)
         for (location in locations) {
             location.setTags(locationTagService.getTagsByLocation(location.id!!))
+            location.setUrls(imageService.getAllImagesByOwner(location.id, "location"))
         }
         return locations
     }
@@ -81,6 +81,7 @@ class LocationService
         val locations = repo.findAll().toList()
         for (location in locations) {
             location.setTags(locationTagService.getTagsByLocation(location.id!!))
+            location.setUrls(imageService.getAllImagesByOwner(location.id, "location"))
         }
         return locations
     }
@@ -92,12 +93,10 @@ class LocationService
                                         description: String?,
                                         latitude: Double?,
                                         longitude: Double?,
-                                        picture: String?,
                                         newLocationTags: List<LocationTag>?): Location {
         val location = repo.findById(id) ?: throw FailedToFetchResourceException("no such location with that name")
         permissionService.authorizeLocationAction(loggedInUser, location)
-        // delete old image
-        val pictureURI = if (picture != null) imageService.uploadImage(loggedInUser, picture) else null
+
         val currentLocationTags = locationTagService.getTagsByLocation(id)
         val updatedLocation = location.copy(
                 locationName = name ?: location.locationName,
@@ -105,8 +104,8 @@ class LocationService
                 description = description ?: location.description,
                 latitude = latitude ?: location.latitude,
                 longitude = longitude ?: location.longitude,
-                pictureURI = pictureURI ?: location.pictureURI,
         )
+
         // save stuff in the normal
         updatedLocation.setTags(currentLocationTags)
         repo.save(updatedLocation)
@@ -127,19 +126,20 @@ class LocationService
                             loggedInUser = loggedInUser,
                             tags = unassignedTags,
                             location = location)
-
-
         }
         updatedLocation.setTags(locationTagService.getTagsByLocation(id))
+        updatedLocation.setUrls(imageService.getAllImagesByOwner(id, "location"))
         return updatedLocation
     }
 
     override suspend fun deleteLocation(loggedInUser: LoggedInUser, id: Int): Location {
 
         val currentLocation = repo.findById(id) ?: throw FailedToFetchResourceException("Location does not exist")
-        // delete image
         currentLocation.locationTags = locationTagService.getTagsByLocation(id)
+        currentLocation.setUrls(imageService.getAllImagesByOwner(id, "location"))
+
         permissionService.authorizeLocationAction(loggedInUser, currentLocation)
+        imageService.deleteImagesByLocation(loggedInUser, id, currentLocation)
         repo.deleteById(id)
         return currentLocation
     }
