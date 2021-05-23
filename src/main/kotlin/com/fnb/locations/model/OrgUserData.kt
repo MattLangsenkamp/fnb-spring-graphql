@@ -17,9 +17,7 @@ data class OrgUserData @Autowired(required = false) constructor(
         val orgUserId: Int,
         val username: String,
         val contact: String,
-        val description: String,
-        @Column("picture_uri")
-        val pictureURI: String,
+        val description: String
 ) {
     @Transient
     lateinit var locations: List<Location>
@@ -32,4 +30,14 @@ data class OrgUserData @Autowired(required = false) constructor(
     fun locations(): List<Location> {
         return locations
     }
+
+    @Transient
+    lateinit var imageUrls: List<ImageUrl>
+
+    @GraphQLIgnore
+    fun setUrls(urls: List<ImageUrl>) {
+        imageUrls = urls
+    }
+
+    fun imageUrls(): List<ImageUrl> = imageUrls
 }

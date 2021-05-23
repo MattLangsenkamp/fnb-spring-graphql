@@ -18,15 +18,13 @@ class SignUpMutation(@Autowired private val authService: AuthService,
                        password: String,
                        username: String,
                        contact: String,
-                       description: String,
-                       picture: String): Tokens {
+                       description: String): Tokens {
 
         logger.debug("sign up with email $email received")
         val newUser = authService.signUp(email, password, UserPermissionLevel.USER)
         userDataService.addUserData(loggedInUser = newUser.toLoggedInUser(), username,
                 contact,
-                description,
-                picture)
+                description)
         return authService.signTokens(newUser)
     }
 }

@@ -23,7 +23,7 @@ class UpdateLocationMutation
                                description: String?,
                                latitude: Double?,
                                longitude: Double?,
-                               picture: String?,
+                               pictureType: String?,
                                typeTags: List<LocationTag>?): Location {
         logger.debug("request to update location with id: $id received")
 // okk
@@ -37,7 +37,6 @@ class UpdateLocationMutation
                 description = description,
                 latitude = latitude,
                 longitude = longitude,
-                picture = picture,
                 newLocationTags = typeTags)
     }
 }

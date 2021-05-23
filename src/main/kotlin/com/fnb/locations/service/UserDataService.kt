@@ -1,6 +1,5 @@
 package com.fnb.locations.service
 
-import com.fnb.locations.model.Location
 import com.fnb.locations.model.LoggedInUser
 import com.fnb.locations.model.OrgUserData
 
@@ -9,8 +8,7 @@ interface UserDataService {
             loggedInUser: LoggedInUser,
             username: String,
             contact: String,
-            description: String,
-            picture: String): OrgUserData
+            description: String): OrgUserData
 
     suspend fun deleteUserData(loggedInUser: LoggedInUser, id: Int): OrgUserData
 
@@ -24,6 +22,5 @@ interface UserDataService {
                                id: Int,
                                username: String?,
                                contact: String?,
-                               description: String?,
-                               picture: String?): OrgUserData
+                               description: String?): OrgUserData
 }

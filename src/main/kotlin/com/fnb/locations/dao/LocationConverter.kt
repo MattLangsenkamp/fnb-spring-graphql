@@ -16,7 +16,6 @@ class LocationReadConverter : Converter<Row, Location> {
                 description = source.get("id").toString(),
                 latitude = source.get("id").toString().toDouble(),
                 longitude = source.get("id").toString().toDouble(),
-                pictureURI = source.get("id").toString(),
                 locationOwner = source.get("location_owner").toString().toInt(),
                 needsCleaning = source.get("id").toString().toBoolean(),
                 creationDateTime = source.get("creation_date_time").toString(),

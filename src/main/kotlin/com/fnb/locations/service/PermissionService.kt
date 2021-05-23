@@ -7,4 +7,5 @@ interface PermissionService {
     suspend fun authorizeUserDataAction(loggedInUser: LoggedInUser, userData: OrgUserData)
     suspend fun authorizeLocationAction(loggedInUser: LoggedInUser, location: Location)
     suspend fun authorizeLocationTagAction(loggedInUser: LoggedInUser, locationTag: LocationTag)
+    suspend fun authorizeImageAction(loggedInUser: LoggedInUser, imageUrl: ImageUrl)
 }

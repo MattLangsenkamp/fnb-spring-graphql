@@ -14,7 +14,6 @@ interface LocationService {
      * @param description description of location
      * @param latitude
      * @param longitude
-     * @param picture the location of the associated picture
      * @param locationTags the type of location
      * @return newly created location on success, null on failure
      */
@@ -24,7 +23,6 @@ interface LocationService {
                             description: String,
                             latitude: Double,
                             longitude: Double,
-                            picture: String,
                             locationTags: List<LocationTag>): Location
 
     /**
@@ -57,7 +55,6 @@ interface LocationService {
                                description: String?,
                                latitude: Double?,
                                longitude: Double?,
-                               picture: String?,
                                newLocationTags: List<LocationTag>?): Location
 
     /**

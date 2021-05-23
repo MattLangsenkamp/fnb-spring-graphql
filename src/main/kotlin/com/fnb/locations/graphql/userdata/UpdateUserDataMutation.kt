@@ -21,7 +21,6 @@ class UpdateUserDataMutation
             username: String?,
             contact: String?,
             description: String?,
-            picture: String?,
             locations: List<Location>?): OrgUserData {
 
         logger.info("request to update user data with id ")
@@ -33,7 +32,6 @@ class UpdateUserDataMutation
                 username,
                 contact,
                 description,
-                picture,
         )
     }
 }
