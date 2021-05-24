@@ -14,7 +14,7 @@ class MinioConfig {
     @Value("\${minio.secret.key}")
     lateinit var secretKey: String
 
-    @Value("\${minio.url}")
+    @Value("\${minio.external.url}")
     lateinit var minioUrl: String
 
     @Bean
