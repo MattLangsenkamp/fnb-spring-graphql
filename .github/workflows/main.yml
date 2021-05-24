@@ -44,7 +44,7 @@ jobs:
       - name: deploy stack
         uses: garygrossgarten/github-action-ssh@release
         with:
-          command: docker-compose up -d --force-recreate
+          command: docker-compose pull && docker-compose up -d --force-recreate
           host: 68.183.203.29
           username: root
           passphrase: ${{ secrets.PASSPHRASE }}
