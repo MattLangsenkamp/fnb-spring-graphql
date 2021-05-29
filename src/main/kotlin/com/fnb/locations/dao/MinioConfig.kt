@@ -25,7 +25,7 @@ class MinioConfig {
             MinioClient
                     .builder()
                     .credentials(accessKey, secretKey)
-                    .endpoint(minioUrl, 334, true)
+                    .endpoint(minioUrl, 443, true)
                     .build()
         } catch (e: Exception) {
             throw RuntimeException(e.message)
