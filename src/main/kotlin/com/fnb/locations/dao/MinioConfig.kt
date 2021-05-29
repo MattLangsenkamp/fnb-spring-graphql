@@ -1,6 +1,8 @@
 package com.fnb.locations.dao
 
 import io.minio.MinioClient
+import okhttp3.HttpUrl
+
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -23,7 +25,8 @@ class MinioConfig {
             MinioClient
                     .builder()
                     .credentials(accessKey, secretKey)
-                    .endpoint(minioUrl)
+                    .endpoint(minioUrl, 0, true)
+                    .endpoint("minio:9000")
                     .build()
         } catch (e: Exception) {
             throw RuntimeException(e.message)
