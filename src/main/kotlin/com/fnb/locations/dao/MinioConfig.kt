@@ -26,7 +26,6 @@ class MinioConfig {
                     .builder()
                     .credentials(accessKey, secretKey)
                     .endpoint(minioUrl, 0, true)
-                    .endpoint("minio:9000")
                     .build()
         } catch (e: Exception) {
             throw RuntimeException(e.message)
