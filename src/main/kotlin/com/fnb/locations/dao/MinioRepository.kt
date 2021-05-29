@@ -13,10 +13,9 @@ class MinioRepository(@Autowired private val minioClient: MinioClient) {
     private final val bucket: String = "pictures"
 
     init {
-        if (!minioClient.bucketExists(BucketExistsArgs.builder().bucket(bucket).build())) {
-
-            minioClient.makeBucket(MakeBucketArgs.builder().bucket(bucket).build())
-        }
+        //if (!minioClient.bucketExists(BucketExistsArgs.builder().bucket(bucket).build())) {
+        //    minioClient.makeBucket(MakeBucketArgs.builder().bucket(bucket).build())
+        //}
     }
 
     fun uploadFile(name: String, bytes: ByteArray): String {
