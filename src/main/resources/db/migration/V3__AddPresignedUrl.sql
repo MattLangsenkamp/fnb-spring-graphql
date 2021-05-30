@@ -9,6 +9,7 @@ drop COLUMN
 IF EXISTS picture_uri ;
 
 
+
 create table if not exists image_url(
   id        int PRIMARY KEY generated always as identity,
   type      VARCHAR(250) NOT NULL,
