@@ -3,14 +3,20 @@ package com.fnb.locations.dao
 import io.minio.*
 import io.minio.http.Method
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
-import org.springframework.stereotype.Repository
 import java.util.concurrent.TimeUnit
 
 @Component
 class MinioRepository(@Autowired private val minioClient: MinioClient) {
 
     private final val bucket: String = "pictures"
+
+    @Value("\${minio.url}")
+    lateinit var minioUrl: String
+
+    @Value("\${minio.external.url}")
+    lateinit var minioExternalUrl: String
 
     init {
         //if (!minioClient.bucketExists(BucketExistsArgs.builder().bucket(bucket).build())) {
@@ -44,7 +50,8 @@ class MinioRepository(@Autowired private val minioClient: MinioClient) {
     }
 
     fun getPreSignedUrl(name: String): String {
-        return minioClient.getPresignedObjectUrl(
+
+        val unAlteredUrl = minioClient.getPresignedObjectUrl(
                 GetPresignedObjectUrlArgs.builder()
                         .method(Method.PUT)
                         .bucket(bucket)
@@ -52,5 +59,6 @@ class MinioRepository(@Autowired private val minioClient: MinioClient) {
                         .expiry(1, TimeUnit.DAYS)
                         .extraQueryParams(mapOf("Content-type" to "image//*"))
                         .build())
+        return unAlteredUrl.replace(oldValue = minioUrl, newValue = minioExternalUrl)
     }
 }
